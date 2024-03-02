@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BMI Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .result-box {
+            background-color: lightblue;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 10px;
+        }
+
+        .result-value {
+            font-size: 36px;
+        }
+
+        .category-label {
+            font-size: 24px;
+        }
+
+        .scale-label {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        .scale-value {
+            font-size: 18px;
+        }
+
+        .factor-label {
+            font-size: 24px;
+        }
+
+        .factor-input {
+            font-size: 24px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        .calculate-button {
+            font-size: 24px;
+            font-weight: bold;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .calculate-button:hover {
+            background-color: #0056b3;
+        }
+
+        .unit-dropdown {
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>BMI Calculator</h1>
+        <form id="calculator-form">
+            <label for="weight" class="factor-label">Weight:</label>
+            <input type="number" step="0.01" id="weight" class="factor-input" required>
+            <select id="weight-unit" class="unit-dropdown">
+                <option value="lb">lb</option>
+                <option value="kg">kg</option>
+            </select><br><br>
+
+            <label for="height" class="factor-label">Height:</label>
+            <input type="number" step="0.01" id="height" class="factor-input" required>
+            <select id="height-unit" class="unit-dropdown">
+                <option value="in">in</option>
+                <option value="cm">cm</option>
+                <option value="ft">ft</option>
+            </select><br><br>
+
+            <button type="submit" class="calculate-button">Calculate BMI</button>
+        </form>
+
+        <div id="result-container"></div>
+    </div>
+
+    <script>
+        document.getElementById("calculator-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Get input values
+            var weight = parseFloat(document.getElementById("weight").value);
+            var height = parseFloat(document.getElementById("height").value);
+            var weightUnit = document.getElementById("weight-unit").value;
+            var heightUnit = document.getElementById("height-unit").value;
+
+            // Convert weight to pounds if unit is kg
+            if (weightUnit === "kg") {
+                weight *= 2.20462;
+            }
+
+            // Convert height to inches if unit is cm
+            if (heightUnit === "cm") {
+                height *= 0.393701;
+            } else if (heightUnit === "ft") {
+                height *= 12; // Convert feet to inches
+            }
+
+            // Calculate BMI
+            var bmi = weight / (height * height) * 703;
+
+            // Determine BMI category
+            var category;
+            if (bmi < 18.5) {
+                category = "Underweight";
+            } else if (bmi >= 18.5 && bmi <= 24.9) {
+                category = "Normal";
+            } else if (bmi >= 25.0 && bmi <= 39.9) {
+                category = "Overweight";
+            } else {
+                category = "Obese";
+            }
+
+            // BMI scale
+            var scale = "Underweight: < 18.5<br>Normal: 18.5 - 24.9<br>Overweight: 25.0 - 39.9<br>Obese: >= 40.0";
+
+            // Display the result
+            var resultContainer = document.getElementById("result-container");
+            resultContainer.innerHTML = "<div class='result-box'><span class='result-value'>" + bmi.toFixed(2) + "</span><br><span class='category-label'>Category: " + category + "</span><br><br><span class='scale-label'>BMI Scale:</span><br><span class='scale-value'>" + scale + "</span></div>";
+        });
+    </script>
+</body>
+</html>
